@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
 @Component({
   selector: 'app-destino-viaje',
   standalone: true,
@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./destino-viaje.css']
 })
 export class DestinoViaje {
-  nombre: string ;
+  @Input() destino!: ModeloDestinoViaje ;
+  @HostBinding('attr.class')cssClass='col-md-4';
   constructor() {
-    this.nombre = 'Barcelona';
   }
 }

@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { DestinoViaje } from './destino-viaje/destino-viaje';
+import { ListaDestino } from './lista-destino/lista-destino';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DestinoViaje],
+  imports: [ListaDestino],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
