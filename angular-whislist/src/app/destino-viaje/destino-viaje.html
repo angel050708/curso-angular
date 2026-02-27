@@ -3,17 +3,26 @@
 <div class="card-content">
     <div class="card-img">
       <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=380&q=80" alt="paisaje">
-      <span><h4>{{destino.nombre}}</h4></span>
+      <span><h4>{{position}}</h4></span>
     </div>
     <div class="card-desc">
       <h3>{{destino.nombre}}</h3>
       <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam, voluptatum! Dolor quo,
-        perspiciatis voluptas totam
+       Servicios
       </p>
+      <ul>
+        <li *ngFor="let s of destino.servicios">
+            <span [ngSwitch]="s">
+                <i *ngSwitchCase="'desayuno'" style="color: yellow;">{{s}}</i>
+                <i *ngSwitchDefault>{{s}}</i>
+            </span>
+        </li>
+      </ul>
       <a href="#" class="btn-card" (click)="Ir()">Ir!</a>
-      <span [style.display]="destino.isSelected() ? '' : 'none'"> PREFERIDO</span>
-    </div>
+      <span *ngIf="destino.isSelected()">
+          <span ngNonBindable> PREFERIDO</span>
+          </span>
+      </div>
   </div>
 
 
