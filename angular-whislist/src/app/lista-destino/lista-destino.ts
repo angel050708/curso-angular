@@ -24,5 +24,10 @@ export class ListaDestino {
     return false;
   }
 
+  elegido(destino: ModeloDestinoViaje) {
+    this.destinos.forEach(function(x) { x.setSelected(false); });
+    destino.setSelected(true);
+  }
+
 
 }
