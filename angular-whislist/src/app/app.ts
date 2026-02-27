@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { ListaDestino } from './lista-destino/lista-destino';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ListaDestino],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

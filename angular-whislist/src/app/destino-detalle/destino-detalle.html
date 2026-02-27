@@ -1,0 +1,11 @@
+<div *ngIf="destino; else noEncontrado">
+  <h2>{{ destino.nombre }}</h2>
+  <img [src]="destino.imagenUrl" alt="{{ destino.nombre }}" style="max-width:400px;">
+  <h4>Servicios</h4>
+  <ul>
+    <li *ngFor="let s of destino.servicios">{{ s }}</li>
+  </ul>
+</div>
+<ng-template #noEncontrado>
+  <p>Destino no encontrado.</p>
+</ng-template>

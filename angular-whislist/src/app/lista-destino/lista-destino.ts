@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';
 import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
+import { DestinosService } from '../services/destinos.service';
+
 
 @Component({
   selector: 'app-lista-destino',
@@ -11,23 +13,17 @@ import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.mode
   styleUrls: ['./lista-destino.css'],
 })
 export class ListaDestino {
-  destinos: ModeloDestinoViaje[];
-  constructor() {
-    this.destinos = [];
+  get destinos(): ModeloDestinoViaje[] {
+    return this.svc.destinos;
   }
+  constructor(private svc: DestinosService) {}
 
-
-  guardar(nombre: string, url: string):boolean {
-    this.destinos.push(new ModeloDestinoViaje(nombre, url));
-    
-    
+  guardar(nombre: string, url: string): boolean {
+    this.svc.agregar(nombre, url);
     return false;
   }
 
   elegido(destino: ModeloDestinoViaje) {
-    this.destinos.forEach(function(x) { x.setSelected(false); });
-    destino.setSelected(true);
+    this.svc.elegir(destino);
   }
-
-
 }

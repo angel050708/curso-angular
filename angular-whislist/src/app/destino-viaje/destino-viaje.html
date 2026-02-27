@@ -22,6 +22,7 @@
       <span *ngIf="destino.isSelected()">
           <span ngNonBindable> PREFERIDO</span>
           </span>
+          <a [routerLink]="['/destino', position]">Ver Detalle</a>
       </div>
   </div>
 
