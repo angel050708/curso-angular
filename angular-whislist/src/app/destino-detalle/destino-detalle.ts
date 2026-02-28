@@ -17,7 +17,7 @@ export class DestinoDetalle implements OnInit {
   constructor(private route: ActivatedRoute, private svc: DestinosService) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.destino = this.svc.getDestino(id);
+    const id = this.route.snapshot.paramMap.get('id');
+    this.destino= null!;
   }
 }

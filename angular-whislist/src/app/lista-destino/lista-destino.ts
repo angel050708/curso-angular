@@ -6,7 +6,6 @@ import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.mode
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
 import { DestinosApiClient } from '../models/destinos-api-client.model';
 import { AppState } from '../app.config';
-import { ElegidoFavoritoAction } from '../models/destinos-viajes-state.models';
 
 
 @Component({
@@ -19,7 +18,8 @@ import { ElegidoFavoritoAction } from '../models/destinos-viajes-state.models';
 })
 export class ListaDestino implements OnInit {
   @Output() onItemAdded: EventEmitter<ModeloDestinoViaje> = new EventEmitter();
-  updates: string[] 
+  updates: string[] = [];
+  all: ModeloDestinoViaje[] = [];
 
   get destinos(): ModeloDestinoViaje[] {
     return this.destinosApiClient.getAll();
@@ -29,15 +29,13 @@ export class ListaDestino implements OnInit {
     this.onItemAdded = new EventEmitter();
     this.updates = [];
     this.store.select(state => state.destinos.favorito)
-    .subscribe(data => {
-      if(data != null){
-        this.updates.push('Se ha elegido '+ data.nombre);
-      }
-    });
-    this.destinosApiClient.subscribeOnChange((d: ModeloDestinoViaje) => {
-    });
+      .subscribe(d => {
+        if (d != null) {
+          this.updates.push('Se ha elegido a ' + d.nombre);
+        }
+      });
+    store.select(state => state.destinos.items).subscribe(items => this.all = items);
   }
-      
 
   ngOnInit() {
   }
@@ -45,11 +43,9 @@ export class ListaDestino implements OnInit {
   agregado(d: ModeloDestinoViaje): void {
     this.destinosApiClient.add(d);
     this.onItemAdded.emit(d);
-    this.store.dispatch(new ElegidoFavoritoAction(d));
   }
 
   elegido(destino: ModeloDestinoViaje) {
     this.destinosApiClient.elegir(destino);
-    this.store.dispatch(new ElegidoFavoritoAction(destino));
   }
 }

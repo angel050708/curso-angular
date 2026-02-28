@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideStore, ActionReducerMap } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { StoreModule as NgRxStoreModule  } from '@ngrx/store';
 
 
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideClientHydration(withEventReplay()),
     provideStore(reducers, { initialState: reducersInitialState }),
-    provideEffects([DestinosViajesEffects])
+    provideEffects([DestinosViajesEffects]),
+    provideStoreDevtools({ maxAge: 25 })
   ]
 };

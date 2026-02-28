@@ -3,7 +3,7 @@ export class DestinoViaje {
     servicios: string[];
     id: string;
 
-    constructor(public nombre: string, public imagenUrl: string) { 
+    constructor(public nombre: string, public imagenUrl: string, public votes: number) { 
         this.servicios = [ 'pileta', 'desayuno', 'wifi'];
         this.id = (new Date().getTime()).toString();
     }
@@ -12,6 +12,14 @@ export class DestinoViaje {
     }
     setSelected(s : boolean) {
         this.selected = s;
+    }
+
+
+    voteup(){
+        this.votes++;
+    }
+    votedown(){
+        this.votes--;
     }
 }
     

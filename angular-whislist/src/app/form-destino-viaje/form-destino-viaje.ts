@@ -1,6 +1,6 @@
 
 import { EventEmitter, Component, OnInit, Output, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { DestinoViaje } from '../models/destino-viaje.model';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { from } from 'rxjs';
@@ -10,7 +10,7 @@ import { ajax } from 'rxjs/ajax';
 @Component({
   selector: 'app-form-destino-viaje',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './form-destino-viaje.html',
   styleUrl: './form-destino-viaje.css',
 })
