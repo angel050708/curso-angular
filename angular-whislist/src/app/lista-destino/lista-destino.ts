@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';
 import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
-import { DestinosService } from '../services/destinos.service';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
+import { DestinosApiClient } from '../models/destinos-api-client.model';
 
 
 @Component({
@@ -12,18 +12,35 @@ import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
   imports: [CommonModule, DestinoViaje, FormDestinoViaje],
   templateUrl: './lista-destino.html',
   styleUrls: ['./lista-destino.css'],
+  providers: [DestinosApiClient]
 })
-export class ListaDestino {
+export class ListaDestino implements OnInit {
+  @Output() onItemAdded: EventEmitter<ModeloDestinoViaje> = new EventEmitter();
+  updates: string[] 
+
   get destinos(): ModeloDestinoViaje[] {
-    return this.svc.destinos;
+    return this.destinosApiClient.getAll();
   }
-  constructor(private svc: DestinosService) {}
+
+  constructor(private destinosApiClient: DestinosApiClient) {
+    this.onItemAdded = new EventEmitter();
+    this.updates = [];
+    this.destinosApiClient.subscribeOnChange((d: ModeloDestinoViaje) => {
+      if(d != null) {
+        this.updates.push('Se eligió a ' + d.nombre);
+      }
+    });
+  }
+
+  ngOnInit() {
+  }
 
   agregado(d: ModeloDestinoViaje): void {
-    this.svc.agregar(d.nombre, d.imagenUrl);
+    this.destinosApiClient.add(d);
+    this.onItemAdded.emit(d);
   }
 
   elegido(destino: ModeloDestinoViaje) {
-    this.svc.elegir(destino);
+    this.destinosApiClient.elegir(destino);
   }
 }

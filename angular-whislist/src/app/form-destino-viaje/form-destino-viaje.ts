@@ -3,7 +3,10 @@ import { EventEmitter, Component, OnInit, Output, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { DestinoViaje } from '../models/destino-viaje.model';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-
+import { from } from 'rxjs';
+import {map, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 @Component({
   selector: 'app-form-destino-viaje',
   standalone: true,
@@ -16,18 +19,35 @@ export class FormDestinoViaje implements OnInit {
   fg: FormGroup;
   private fb = inject(FormBuilder);
   minLongitud = 3;
+  searchResults: string[] = [];
 
   constructor() {
     this.onItemAdded = new EventEmitter();
     this.fg = this.fb.group({
       nombre: ['', [Validators.compose([Validators.required, this.nombreValidatorParametrizable(this.minLongitud).bind(this)])]],
-      url: ['']
+      url: [''],
+      
+      
+    });
+    this.fg.valueChanges.subscribe((form: any) => {
+      console.log('cambio el formulario: ' + JSON.stringify(form));
     });
   }
 
   ngOnInit() {
-    this.fg.valueChanges.subscribe((form: any) => {
-      console.log('cambio el formulario: ' + JSON.stringify(form));
+    let elemNombre = <HTMLInputElement>document.getElementById('nombre');
+    fromEvent(elemNombre, 'input')
+    .pipe(
+      map((e: Event) => (e.target as HTMLInputElement).value),
+      filter(text => text.length > 2),
+      debounceTime(200),
+      distinctUntilChanged(),
+        switchMap(text => ajax('assets/datos.json'))
+    )
+    .subscribe((ajaxResponse) => {
+      console.log(ajaxResponse);
+      console.log(ajaxResponse.response);
+      this.searchResults = ajaxResponse.response as string[];
     });
   }
 
