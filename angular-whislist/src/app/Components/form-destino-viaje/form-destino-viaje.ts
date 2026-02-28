@@ -53,7 +53,7 @@ export class FormDestinoViaje implements OnInit {
 
 
   guardar(nombre: string, url: string): boolean {
-    const d = new DestinoViaje(nombre, url);
+    const d = new DestinoViaje(nombre, url, 0);
     this.onItemAdded.emit(d);
     this.fg.reset();
     return false;

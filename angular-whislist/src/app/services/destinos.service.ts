@@ -8,7 +8,7 @@ export class DestinosService {
   destinos: DestinoViaje[] = [];
 
   agregar(nombre: string, imagenUrl: string): void {
-    this.destinos.push(new DestinoViaje(nombre, imagenUrl));
+    this.destinos.push(new DestinoViaje(nombre, imagenUrl, 0));
   }
 
   getDestino(idx: number): DestinoViaje | undefined {
