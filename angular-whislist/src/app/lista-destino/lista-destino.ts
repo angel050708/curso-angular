@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';
 import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
 import { DestinosApiClient } from '../models/destinos-api-client.model';
+import { AppState } from '../app.config';
+import { ElegidoFavoritoAction } from '../models/destinos-viajes-state.models';
 
 
 @Component({
@@ -22,15 +25,19 @@ export class ListaDestino implements OnInit {
     return this.destinosApiClient.getAll();
   }
 
-  constructor(private destinosApiClient: DestinosApiClient) {
+  constructor(private destinosApiClient: DestinosApiClient, private store: Store<AppState>) {
     this.onItemAdded = new EventEmitter();
     this.updates = [];
-    this.destinosApiClient.subscribeOnChange((d: ModeloDestinoViaje) => {
-      if(d != null) {
-        this.updates.push('Se eligió a ' + d.nombre);
+    this.store.select(state => state.destinos.favorito)
+    .subscribe(data => {
+      if(data != null){
+        this.updates.push('Se ha elegido '+ data.nombre);
       }
     });
+    this.destinosApiClient.subscribeOnChange((d: ModeloDestinoViaje) => {
+    });
   }
+      
 
   ngOnInit() {
   }
@@ -38,9 +45,11 @@ export class ListaDestino implements OnInit {
   agregado(d: ModeloDestinoViaje): void {
     this.destinosApiClient.add(d);
     this.onItemAdded.emit(d);
+    this.store.dispatch(new ElegidoFavoritoAction(d));
   }
 
   elegido(destino: ModeloDestinoViaje) {
     this.destinosApiClient.elegir(destino);
+    this.store.dispatch(new ElegidoFavoritoAction(destino));
   }
 }

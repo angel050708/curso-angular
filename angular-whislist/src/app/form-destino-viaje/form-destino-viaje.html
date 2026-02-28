@@ -9,6 +9,10 @@
             class="form-control"
             formControlName="nombre"
             placeholder="Ingresar nombre...">
+            <ul>
+                <li *ngFor = "let r of searchResults;">{{r}}</li>
+
+            </ul>
             <div *ngIf="fg.controls['nombre'].hasError('required')" class="alert alert-danger">El nombre es requerido</div>
             <div *ngIf="fg.controls['nombre'].hasError('invalidNombre')" class="alert alert-danger">El nombre es inválido</div>
             <div *ngIf="fg.controls['nombre'].hasError('minLongNombre')" class="alert alert-danger">El nombre es demasiado corto, al menos {{minLongitud}} de largo</div>
