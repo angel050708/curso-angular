@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DestinosService } from '../services/destinos.service';
-import { DestinoViaje } from '../models/destino-viaje.model';
+import { DestinosService } from '../../services/destinos.service';
+import { DestinoViaje } from '../../models/destino-viaje.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

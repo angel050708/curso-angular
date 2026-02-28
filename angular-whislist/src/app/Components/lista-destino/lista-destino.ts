@@ -2,10 +2,10 @@ import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';
-import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
+import { DestinoViaje as ModeloDestinoViaje } from '../../models/destino-viaje.model';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
-import { DestinosApiClient } from '../models/destinos-api-client.model';
-import { AppState } from '../app.config';
+import { DestinosApiClient } from '../../models/destinos-api-client.model';
+import { AppState } from '../../app.config';
 
 
 @Component({

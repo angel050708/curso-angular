@@ -1,10 +1,10 @@
 import { Component, HostBinding, Input, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DestinoViaje as ModeloDestinoViaje } from '../models/destino-viaje.model';
-import { AppState } from '../app.config';
+import { DestinoViaje as ModeloDestinoViaje } from '../../models/destino-viaje.model';
+import { AppState } from '../../app.config';
 import { Store } from '@ngrx/store';
-import { VoteUpAction, VoteDownAction } from '../models/destinos-viajes-state.models';
+import { VoteUpAction, VoteDownAction } from '../../models/destinos-viajes-state.models';
 
 @Component({
   selector: 'app-destino-viaje',

@@ -1,7 +1,7 @@
 
 import { EventEmitter, Component, OnInit, Output, inject } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
-import { DestinoViaje } from '../models/destino-viaje.model';
+import { DestinoViaje } from '../../models/destino-viaje.model';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { from } from 'rxjs';
 import {map, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
