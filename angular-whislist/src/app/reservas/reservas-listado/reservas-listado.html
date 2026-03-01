@@ -1,0 +1,7 @@
+<p>reservas-listado works!</p>
+<a [routerLink]="['./',10]">Detalle</a>
+<a [routerLink]="['/login']">Ir a login</a>
+
+<div *ngFor="let r of api.getAll()">
+    {{r.name}} - {{r.id}}
+</div>
