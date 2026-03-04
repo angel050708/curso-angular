@@ -1,6 +1,6 @@
 
-import { EventEmitter, Component, OnInit, Output, inject } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
+import { EventEmitter, Component, OnInit, Output, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, NgIf, NgFor, DOCUMENT } from '@angular/common';
 import { DestinoViaje } from '../../models/destino-viaje.model';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { from } from 'rxjs';
@@ -18,6 +18,8 @@ export class FormDestinoViaje implements OnInit {
   @Output() onItemAdded: EventEmitter<DestinoViaje> = new EventEmitter();
   fg: FormGroup;
   private fb = inject(FormBuilder);
+  private platformId = inject(PLATFORM_ID);
+  private document = inject(DOCUMENT);
   minLongitud = 3;
   searchResults: string[] = [];
 
@@ -35,7 +37,10 @@ export class FormDestinoViaje implements OnInit {
   }
 
   ngOnInit() {
-    let elemNombre = <HTMLInputElement>document.getElementById('nombre');
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // no ejecutar en SSR, document no existe en Node.js
+    }
+    let elemNombre = <HTMLInputElement>this.document.getElementById('nombre');
     fromEvent(elemNombre, 'input')
     .pipe(
       map((e: Event) => (e.target as HTMLInputElement).value),

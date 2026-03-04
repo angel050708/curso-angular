@@ -25,7 +25,8 @@ export enum DestinosViajesActionTypes {
   NUEVO_DESTINO = '[Destinos Viajes] Nuevo',
   ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
   VOTE_UP = '[Destinos Viajes] Vote Up',
-  VOTE_DOWN = '[Destinos Viajes] Vote Down'
+  VOTE_DOWN = '[Destinos Viajes] Vote Down',
+  DESTINOS_LOADED = '[Destinos Viajes] Loaded'
 }
 
 export class NuevoDestinoAction implements Action {
@@ -48,7 +49,13 @@ export class VoteDownAction implements Action {
   constructor(public destino: DestinoViaje) {}
 }
 
-export type DestinosViajesActions = NuevoDestinoAction | ElegidoFavoritoAction | VoteUpAction | VoteDownAction;
+// Action para cargar destinos desde el API
+export class DestinosLoadedAction implements Action {
+  readonly type = DestinosViajesActionTypes.DESTINOS_LOADED;
+  constructor(public destinos: DestinoViaje[]) {}
+}
+
+export type DestinosViajesActions = NuevoDestinoAction | ElegidoFavoritoAction | VoteUpAction | VoteDownAction | DestinosLoadedAction;
 
 //REDUCERS
 export function reducerDestinosViajes(
@@ -85,6 +92,15 @@ export function reducerDestinosViajes(
       d.votedown();
       return {
         ...state
+      };
+    }
+
+    // Reducer para manejar destinos cargados desde el API
+    case DestinosViajesActionTypes.DESTINOS_LOADED: {
+      return {
+        ...state,
+        items: (action as DestinosLoadedAction).destinos,
+        loading: false
       };
     }
   }

@@ -1,11 +1,22 @@
-<div *ngIf="destino; else noEncontrado">
-  <h2>{{ destino.nombre }}</h2>
-  <img [src]="destino.imagenUrl" alt="{{ destino.nombre }}" style="max-width:400px;">
-  <h4>Servicios</h4>
-  <ul>
-    <li *ngFor="let s of destino.servicios">{{ s }}</li>
-  </ul>
+<div class="container my-4">
+  <div *ngIf="destino; else noEncontrado">
+    <div class="card shadow-sm">
+      <img [src]="destino.imagenUrl" class="card-img-top" alt="{{ destino.nombre }}" style="max-height:350px;object-fit:cover;">
+      <div class="card-body">
+        <h2 class="card-title">{{ destino.nombre }}</h2>
+        <h6 class="text-muted mb-3">Servicios incluidos</h6>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let s of destino.servicios" class="list-group-item">{{ s }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noEncontrado>
+    <div class="text-center my-5 text-muted">
+      <p>El destino no fue encontrado.</p>
+      <a routerLink="/" class="btn btn-outline-primary">Volver al inicio</a>
+    </div>
+  </ng-template>
 </div>
-<ng-template #noEncontrado>
-  <p>Destino no encontrado.</p>
-</ng-template>
+

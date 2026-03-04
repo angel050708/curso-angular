@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Output, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';
 import { DestinoViaje as ModeloDestinoViaje } from '../../models/destino-viaje.model';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
 import { DestinosApiClient } from '../../models/destinos-api-client.model';
+import { DestinosHttpService } from '../../services/destinos-http.service';
 import { AppState } from '../../app.config';
+import { ElegidoFavoritoAction } from '../../models/destinos-viajes-state.models';
 
 
 @Component({
@@ -20,32 +22,57 @@ export class ListaDestino implements OnInit {
   @Output() onItemAdded: EventEmitter<ModeloDestinoViaje> = new EventEmitter();
   updates: string[] = [];
   all: ModeloDestinoViaje[] = [];
+  loading = false;
+  
+  private httpService = inject(DestinosHttpService);
+  private store = inject(Store<AppState>);
+  private destinosApiClient = inject(DestinosApiClient);
+  private platformId = inject(PLATFORM_ID);
 
   get destinos(): ModeloDestinoViaje[] {
-    return this.destinosApiClient.getAll();
+    return this.all;
   }
 
-  constructor(private destinosApiClient: DestinosApiClient, private store: Store<AppState>) {
+  constructor() {
     this.onItemAdded = new EventEmitter();
     this.updates = [];
+    
+    // Suscribirse al store para cambios en favorito
     this.store.select(state => state.destinos.favorito)
       .subscribe(d => {
         if (d != null) {
           this.updates.push('Se ha elegido a ' + d.nombre);
         }
       });
-    store.select(state => state.destinos.items).subscribe(items => this.all = items);
+    
+    // Suscribirse reactivamente al store
+    this.store.select(state => state.destinos.items).subscribe(items => {
+      this.all = items;
+    });
   }
 
   ngOnInit() {
+    // Solo hacer llamadas HTTP en el browser (no en SSR/Node.js)
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Cargar destinos desde el API al iniciar
+    this.loading = true;
+    this.httpService.getAll().subscribe({
+      next: () => { this.loading = false; },
+      error: () => { this.loading = false; }
+    });
   }
 
   agregado(d: ModeloDestinoViaje): void {
-    this.destinosApiClient.add(d);
-    this.onItemAdded.emit(d);
+    this.httpService.add(d).subscribe({
+      next: (nuevoDestino) => { this.onItemAdded.emit(nuevoDestino); },
+      error: () => {}
+    });
   }
 
   elegido(destino: ModeloDestinoViaje) {
-    this.destinosApiClient.elegir(destino);
+    this.store.dispatch(new ElegidoFavoritoAction(destino));
   }
 }

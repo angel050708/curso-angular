@@ -63,7 +63,8 @@
               "buildTarget": "angular-whislist:build:production"
             },
             "development": {
-              "buildTarget": "angular-whislist:build:development"
+              "buildTarget": "angular-whislist:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

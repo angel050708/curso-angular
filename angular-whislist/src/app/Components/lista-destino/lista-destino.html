@@ -1,11 +1,10 @@
-<div	class="container	content">
-			<div	class="row">
-							<div	class="col-md-6	offset-md-3">
+<div class="container content">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
 			<span class="anchor" id="formLogin"></span>
-			<!-- form card login with validation feedback -->
 			<div class="card card-outline-secondary">
 				<div class="card-header">
-					<h3 class="mb-2">Whishlist</h3>
+					<h3 class="mb-0">Mi Wishlist de Viajes</h3>
 				</div>
 				<div class="card-body">
 					<app-form-destino-viaje (onItemAdded)="agregado($event)"></app-form-destino-viaje>
@@ -16,20 +15,35 @@
 
 	<hr class="mb-5">
 
-	<div class="row row-flex">
-		<app-destino-viaje *ngFor="let d of all; let i = index" 
-			[destino]="d"
-		  	[idx]=" i + 1 "
-			(clicked)="elegido($event)"></app-destino-viaje>
+	<div *ngIf="loading" class="text-center my-5">
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Cargando...</span>
+		</div>
+		<p class="mt-2 text-muted">Cargando destinos...</p>
 	</div>
-	<hr class="mb-5">
 
 	<div class="row row-flex">
-		<h5>Actividad</h5>
-		
-		<ul>
-			<li *ngFor="let u of updates">{{u}}</li>
-		</ul>
+		<app-destino-viaje
+			*ngFor="let d of all; let i = index"
+			[destino]="d"
+			[idx]="i + 1"
+			(clicked)="elegido($event)">
+		</app-destino-viaje>
+	</div>
+
+	<div *ngIf="!loading && all.length === 0" class="text-center my-5 text-muted">
+		<p>No hay destinos disponibles. ¡Agrega el primero!</p>
+	</div>
+
+	<hr class="mb-3">
+
+	<div *ngIf="updates.length > 0" class="row">
+		<div class="col-12">
+			<h5>Actividad reciente</h5>
+			<ul class="list-unstyled">
+				<li *ngFor="let u of updates" class="text-muted small">• {{ u }}</li>
+			</ul>
+		</div>
 	</div>
 </div>
 
