@@ -26,7 +26,8 @@ export enum DestinosViajesActionTypes {
   ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
   VOTE_UP = '[Destinos Viajes] Vote Up',
   VOTE_DOWN = '[Destinos Viajes] Vote Down',
-  DESTINOS_LOADED = '[Destinos Viajes] Loaded'
+  DESTINOS_LOADED = '[Destinos Viajes] Loaded',
+  INIT_DESTINOS_FROM_DB = '[Destinos Viajes] Init From DB'
 }
 
 export class NuevoDestinoAction implements Action {
@@ -52,6 +53,12 @@ export class VoteDownAction implements Action {
 // Action para cargar destinos desde el API
 export class DestinosLoadedAction implements Action {
   readonly type = DestinosViajesActionTypes.DESTINOS_LOADED;
+  constructor(public destinos: DestinoViaje[]) {}
+}
+
+// Action para cargar el estado inicial desde Dexie (IndexedDB)
+export class InitDestinosFromDbAction implements Action {
+  readonly type = DestinosViajesActionTypes.INIT_DESTINOS_FROM_DB;
   constructor(public destinos: DestinoViaje[]) {}
 }
 
@@ -95,11 +102,20 @@ export function reducerDestinosViajes(
       };
     }
 
-    // Reducer para manejar destinos cargados desde el API
+    // Reducer: destinos cargados desde el API
     case DestinosViajesActionTypes.DESTINOS_LOADED: {
       return {
         ...state,
         items: (action as DestinosLoadedAction).destinos,
+        loading: false
+      };
+    }
+
+    // Reducer: estado inicial cargado desde Dexie (IndexedDB)
+    case DestinosViajesActionTypes.INIT_DESTINOS_FROM_DB: {
+      return {
+        ...state,
+        items: (action as InitDestinosFromDbAction).destinos,
         loading: false
       };
     }

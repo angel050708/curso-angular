@@ -4,7 +4,9 @@ import { Store } from '@ngrx/store';
 import { Observable, tap, map } from 'rxjs';
 import { DestinoViaje } from '../models/destino-viaje.model';
 import { AppState } from '../app.config';
-import { NuevoDestinoAction, DestinosLoadedAction } from '../models/destinos-viajes-state.models';
+import { NuevoDestinoAction, DestinosLoadedAction, InitDestinosFromDbAction } from '../models/destinos-viajes-state.models';
+import Dexie, { Table } from 'dexie';
+import { DbService } from './db.service';
 
 export interface DestinoApi {
   id: string;
@@ -20,12 +22,18 @@ export interface DestinoApi {
 export class DestinosHttpService {
   private http = inject(HttpClient);
   private store = inject(Store<AppState>);
-  // Ruta relativa - Angular proxy redirige /api/* a http://localhost:3001
+  private db = inject(DbService);  // Inyección de dependencias de Dexie
   private apiUrl = '/api/destinos';
 
-  /**
-   * Obtiene todos los destinos desde el API y notifica a Redux
-   */
+  // 5) Al iniciar la app, carga datos de Dexie y notifica a Redux con action nuevo
+  async initFromDb(): Promise<void> {
+    const locales = await this.db.obtenerTodos();
+    if (locales.length > 0) {
+      const destinos = locales.map(item => this.mapToDestinoViaje(item));
+      this.store.dispatch(new InitDestinosFromDbAction(destinos));
+    }
+  }
+
   getAll(): Observable<DestinoViaje[]> {
     return this.http.get<DestinoApi[]>(this.apiUrl).pipe(
       map(items => items.map(item => this.mapToDestinoViaje(item))),
@@ -35,18 +43,12 @@ export class DestinosHttpService {
     );
   }
 
-  /**
-   * Obtiene un destino por ID desde el API
-   */
   getById(id: string): Observable<DestinoViaje> {
     return this.http.get<DestinoApi>(`${this.apiUrl}/${id}`).pipe(
       map(item => this.mapToDestinoViaje(item))
     );
   }
 
-  /**
-   * Agrega un nuevo destino via API y notifica a Redux con action
-   */
   add(destino: DestinoViaje): Observable<DestinoViaje> {
     const body = {
       nombre: destino.nombre,
@@ -57,22 +59,26 @@ export class DestinosHttpService {
 
     return this.http.post<DestinoApi>(this.apiUrl, body).pipe(
       map(item => this.mapToDestinoViaje(item)),
-      tap(nuevoDestino => {
+      tap(async nuevoDestino => {
+        // 4) API exitoso → guardar también en Dexie de forma asíncrona
+        await this.db.guardarDestino({
+          id: nuevoDestino.id,
+          nombre: nuevoDestino.nombre,
+          imagenUrl: nuevoDestino.imagenUrl,
+          votes: nuevoDestino.votes,
+          servicios: nuevoDestino.servicios
+        });
         this.store.dispatch(new NuevoDestinoAction(nuevoDestino));
       })
     );
   }
 
-  /**
-   * Elimina un destino via API
-   */
   delete(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      tap(async () => await this.db.eliminar(id))
+    );
   }
 
-  /**
-   * Mapea la respuesta del API al modelo DestinoViaje
-   */
   private mapToDestinoViaje(item: DestinoApi): DestinoViaje {
     const destino = new DestinoViaje(item.nombre, item.imagenUrl, item.votes);
     destino.id = item.id;

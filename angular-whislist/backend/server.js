@@ -61,6 +61,73 @@ app.post('/api/destinos', (req, res) => {
   res.status(201).json(nuevoDestino);
 });
 
+// GET /api/translations/:lang - retorna las traducciones para el idioma indicado
+const translations = {
+  es: {
+    APP: {
+      TITLE: 'Mi Wishlist de Viajes',
+      SUBTITLE: 'Tu lista de destinos soñados',
+      DATE_LABEL: 'Fecha actual'
+    },
+    NAV: {
+      HOME: 'Inicio',
+      DESTINO: 'Destino'
+    },
+    LISTA: {
+      TITULO: 'Mi Wishlist de Viajes',
+      LOADING: 'Cargando destinos...',
+      EMPTY: 'No hay destinos disponibles. ¡Agrega el primero!',
+      ACTIVIDAD: 'Actividad reciente',
+      LANG_SELECTOR: 'Idioma'
+    },
+    FORM: {
+      NOMBRE_LABEL: 'Nombre del destino',
+      URL_LABEL: 'URL de la imagen',
+      NOMBRE_PLACEHOLDER: 'Ingresar nombre...',
+      URL_PLACEHOLDER: 'Ingresar URL de la imagen...',
+      GUARDAR: 'Guardar',
+      ERROR_REQUIRED: 'El nombre es requerido',
+      ERROR_INVALID: 'El nombre es inválido',
+      ERROR_MIN_LENGTH: 'El nombre es demasiado corto'
+    }
+  },
+  en: {
+    APP: {
+      TITLE: 'My Travel Wishlist',
+      SUBTITLE: 'Your list of dream destinations',
+      DATE_LABEL: 'Current date'
+    },
+    NAV: {
+      HOME: 'Home',
+      DESTINO: 'Destination'
+    },
+    LISTA: {
+      TITULO: 'My Travel Wishlist',
+      LOADING: 'Loading destinations...',
+      EMPTY: 'No destinations available. Add the first one!',
+      ACTIVIDAD: 'Recent activity',
+      LANG_SELECTOR: 'Language'
+    },
+    FORM: {
+      NOMBRE_LABEL: 'Destination name',
+      URL_LABEL: 'Image URL',
+      NOMBRE_PLACEHOLDER: 'Enter name...',
+      URL_PLACEHOLDER: 'Enter image URL...',
+      GUARDAR: 'Save',
+      ERROR_REQUIRED: 'Name is required',
+      ERROR_INVALID: 'Name is invalid',
+      ERROR_MIN_LENGTH: 'Name is too short'
+    }
+  }
+};
+
+app.get('/api/translations/:lang', (req, res) => {
+  const lang = req.params.lang;
+  const data = translations[lang] || translations['es'];
+  console.log(`[GET] /api/translations/${lang}`);
+  res.json(data);
+});
+
 // DELETE /api/destinos/:id - elimina un destino
 app.delete('/api/destinos/:id', (req, res) => {
   const index = destinos.findIndex(d => d.id === req.params.id);

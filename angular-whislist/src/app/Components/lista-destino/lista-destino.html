@@ -4,7 +4,7 @@
 			<span class="anchor" id="formLogin"></span>
 			<div class="card card-outline-secondary">
 				<div class="card-header">
-					<h3 class="mb-0">Mi Wishlist de Viajes</h3>
+					<h3 class="mb-0">{{ 'LISTA.TITULO' | translate }}</h3>
 				</div>
 				<div class="card-body">
 					<app-form-destino-viaje (onItemAdded)="agregado($event)"></app-form-destino-viaje>
@@ -17,9 +17,9 @@
 
 	<div *ngIf="loading" class="text-center my-5">
 		<div class="spinner-border text-primary" role="status">
-			<span class="visually-hidden">Cargando...</span>
+			<span class="visually-hidden">{{ 'LISTA.LOADING' | translate }}</span>
 		</div>
-		<p class="mt-2 text-muted">Cargando destinos...</p>
+		<p class="mt-2 text-muted">{{ 'LISTA.LOADING' | translate }}</p>
 	</div>
 
 	<div class="row row-flex">
@@ -32,14 +32,14 @@
 	</div>
 
 	<div *ngIf="!loading && all.length === 0" class="text-center my-5 text-muted">
-		<p>No hay destinos disponibles. ¡Agrega el primero!</p>
+		<p>{{ 'LISTA.EMPTY' | translate }}</p>
 	</div>
 
 	<hr class="mb-3">
 
 	<div *ngIf="updates.length > 0" class="row">
 		<div class="col-12">
-			<h5>Actividad reciente</h5>
+			<h5>{{ 'LISTA.ACTIVIDAD' | translate }}</h5>
 			<ul class="list-unstyled">
 				<li *ngFor="let u of updates" class="text-muted small">• {{ u }}</li>
 			</ul>

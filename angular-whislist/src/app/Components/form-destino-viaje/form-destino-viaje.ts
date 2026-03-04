@@ -7,10 +7,11 @@ import { from } from 'rxjs';
 import {map, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-form-destino-viaje',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor],
+  imports: [ReactiveFormsModule, NgIf, NgFor, TranslateModule],
   templateUrl: './form-destino-viaje.html',
   styleUrl: './form-destino-viaje.css',
 })

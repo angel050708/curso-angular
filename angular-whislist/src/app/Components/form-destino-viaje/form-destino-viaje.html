@@ -2,32 +2,32 @@
     [formGroup]="fg"
     (ngSubmit)="guardar(fg.controls['nombre'].value, fg.controls['url'].value)">
     <div class="form-group">
-        <label for="nombre">Nombre del destino</label>
+        <label for="nombre">{{ 'FORM.NOMBRE_LABEL' | translate }}</label>
         <input
             type="text"
             id="nombre"
             class="form-control"
             formControlName="nombre"
-            placeholder="Ingresar nombre...">
+            [placeholder]="'FORM.NOMBRE_PLACEHOLDER' | translate">
             <ul>
                 <li *ngFor = "let r of searchResults;">{{r}}</li>
 
             </ul>
-            <div *ngIf="fg.controls['nombre'].hasError('required')" class="alert alert-danger">El nombre es requerido</div>
-            <div *ngIf="fg.controls['nombre'].hasError('invalidNombre')" class="alert alert-danger">El nombre es inválido</div>
-            <div *ngIf="fg.controls['nombre'].hasError('minLongNombre')" class="alert alert-danger">El nombre es demasiado corto, al menos {{minLongitud}} de largo</div>
+            <div *ngIf="fg.controls['nombre'].hasError('required')" class="alert alert-danger">{{ 'FORM.ERROR_REQUIRED' | translate }}</div>
+            <div *ngIf="fg.controls['nombre'].hasError('invalidNombre')" class="alert alert-danger">{{ 'FORM.ERROR_INVALID' | translate }}</div>
+            <div *ngIf="fg.controls['nombre'].hasError('minLongNombre')" class="alert alert-danger">{{ 'FORM.ERROR_MIN_LENGTH' | translate }} (mín. {{minLongitud}})</div>
 
 
     </div>
     <div class="form-group">
-        <label for="url">URL de la imagen</label>
+        <label for="url">{{ 'FORM.URL_LABEL' | translate }}</label>
         <input
             type="text"
             id="url"
             class="form-control"
             formControlName="url"
-            placeholder="Ingresar URL de la imagen..."
+            [placeholder]="'FORM.URL_PLACEHOLDER' | translate"
         >
     </div>
-    <button type="submit" class="btn btn-primary" *ngIf="fg.valid">Guardar</button>
+    <button type="submit" class="btn btn-primary" *ngIf="fg.valid">{{ 'FORM.GUARDAR' | translate }}</button>
 </form>

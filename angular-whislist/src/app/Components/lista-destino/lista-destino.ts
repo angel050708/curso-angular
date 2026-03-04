@@ -8,12 +8,13 @@ import { DestinosApiClient } from '../../models/destinos-api-client.model';
 import { DestinosHttpService } from '../../services/destinos-http.service';
 import { AppState } from '../../app.config';
 import { ElegidoFavoritoAction } from '../../models/destinos-viajes-state.models';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-lista-destino',
   standalone: true,
-  imports: [CommonModule, DestinoViaje, FormDestinoViaje],
+  imports: [CommonModule, DestinoViaje, FormDestinoViaje, TranslateModule],
   templateUrl: './lista-destino.html',
   styleUrls: ['./lista-destino.css'],
   providers: [DestinosApiClient]
@@ -52,12 +53,14 @@ export class ListaDestino implements OnInit {
   }
 
   ngOnInit() {
-    // Solo hacer llamadas HTTP en el browser (no en SSR/Node.js)
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    // Cargar destinos desde el API al iniciar
+    // 5) Cargar datos de Dexie primero (estado inicial offline)
+    this.httpService.initFromDb();
+
+    // Luego sincronizar con el API
     this.loading = true;
     this.httpService.getAll().subscribe({
       next: () => { this.loading = false; },
