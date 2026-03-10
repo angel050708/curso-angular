@@ -1,6 +1,7 @@
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, HttpClient } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore, ActionReducerMap } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -15,24 +16,33 @@ import {
   DestinosViajesEffects, 
   initializeDestinosViajesState
 } from './models/destinos-viajes-state.models';
+import {
+  TrackingState,
+  reducerTracking,
+  initializeTrackingState
+} from './models/tracking-state.models';
 import { createApiTranslateLoader } from './services/api-translate-loader';
 
 // redux init
 export interface AppState {
   destinos: DestinosViajesState;
+  tracking: TrackingState;
 }
 
 const reducers: ActionReducerMap<AppState> = {
-  destinos: reducerDestinosViajes
+  destinos: reducerDestinosViajes,
+  tracking: reducerTracking
 };
 let reducersInitialState = {
-  destinos: initializeDestinosViajesState()
+  destinos: initializeDestinosViajesState(),
+  tracking: initializeTrackingState()
 };
 // redux fin init
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideAnimations(),
     provideRouter(routes), 
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),

@@ -4,11 +4,13 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TrackingClickDirective } from './directives/tracking-click.directive';
+import { TrackingObserverService } from './services/tracking-observer.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, AsyncPipe, TranslateModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, AsyncPipe, TranslateModule, TrackingClickDirective],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -21,11 +23,15 @@ export class App {
   });
 
   private translate = inject(TranslateService);
+  private trackingObserver = inject(TrackingObserverService);
 
   constructor() {
     this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang('es');
     this.translate.use('es');
+
+    // Inicializar el servicio de observación de tracking
+    this.trackingObserver.init();
   }
 
   changeLanguage(lang: string): void {

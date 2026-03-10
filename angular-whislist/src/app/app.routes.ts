@@ -8,7 +8,6 @@ import { VuelosComponent } from './Components/vuelos/vuelos-component/vuelos-com
 import { VuelosMainComponent } from './Components/vuelos/vuelos-main-component/vuelos-main-component';
 import { VuelosMasInfoComponent } from './Components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component';
 import { VuelosDetalleComponent } from './Components/vuelos/vuelos-detalle-component/vuelos-detalle-component';
-import path from 'path/win32';
 
 export const childrenRoutesVuelos: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },

@@ -12,3 +12,20 @@
 </form>
 <a class="btn btn-default" (click)="logout()" *ngIf="authService.getUser()">Salir!</a>
 
+<hr>
+<mgl-map
+  [style]="style"
+  [zoom]="[2]"
+  style="height: 50vh; width: 100vw;"
+  >
+<mgl-marker [lngLat]="[-75.551012, 10.421185]">
+  <div
+    class="marker"
+    style="cursor:pointer; font-size:24px;"
+    title="Click para ver info"
+  >📍</div>
+  <mgl-popup>
+    <div style="padding: 8px;"><strong>¡Hola desde Cartagena!</strong></div>
+  </mgl-popup>
+</mgl-marker>
+</mgl-map>

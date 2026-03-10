@@ -1,6 +1,6 @@
 
   
-<div class="card-content">
+<div class="card-content" [@cardState]="destino.isSelected() ? 'selected' : 'default'" appEspiame>
     <div class="card-img">
       <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=380&q=80" alt="paisaje">
       <span><h4>{{position}}</h4></span>
@@ -19,16 +19,16 @@
         </li>
       </ul>
       <div>
-        <a href="#" (click)="voteup()"><i class="material-icons md-18">thumb_up</i></a>
-         <a href="#" (click)="voteDown()"><i class="material-icons md-18">thumb_down</i></a>
-         {{destino.votes}}
+        <a href="#" (click)="voteup()" appTrackingClick data-tracking-tag="voto-positivo"><i class="material-icons md-18">thumb_up</i></a>
+         <a href="#" (click)="voteDown()" appTrackingClick data-tracking-tag="voto-negativo"><i class="material-icons md-18">thumb_down</i></a>
+         <span [@votesAnim]="destino.votes">{{destino.votes}}</span>
 
       </div>
-      <a href="javascript:void(0)" class="btn-card" (click)="Ir()">Ir!</a>
+      <a href="javascript:void(0)" class="btn-card" (click)="Ir()" appTrackingClick data-tracking-tag="boton-ir">Ir!</a>
       <span *ngIf="destino.isSelected()">
           <span ngNonBindable> PREFERIDO</span>
           </span>
-          <a [routerLink]="['/destino', position]">Ver Detalle</a>
+          <a [routerLink]="['/destino', position]" appTrackingClick data-tracking-tag="ver-detalle">Ver Detalle</a>
       </div>
   </div>
 

@@ -1,10 +1,10 @@
-<div class="container content">
+<div class="container content" appEspiame>
 	<div class="row">
 		<div class="col-md-6 offset-md-3">
 			<span class="anchor" id="formLogin"></span>
 			<div class="card card-outline-secondary">
 				<div class="card-header">
-					<h3 class="mb-0">{{ 'LISTA.TITULO' | translate }}</h3>
+					<h3 class="mb-0" appTrackingClick data-tracking-tag="titulo-lista">{{ 'LISTA.TITULO' | translate }}</h3>
 				</div>
 				<div class="card-body">
 					<app-form-destino-viaje (onItemAdded)="agregado($event)"></app-form-destino-viaje>
@@ -36,6 +36,18 @@
 	</div>
 
 	<hr class="mb-3">
+
+	<!-- Contadores de Tracking Tags (Redux reactivo) -->
+	<div class="row" *ngIf="(trackingTags$ | async) as trackingTags">
+		<div class="col-12" *ngIf="trackingTags.length > 0">
+			<h5>📊 Tracking Tags (Redux)</h5>
+			<div class="d-flex flex-wrap gap-2 mb-3">
+				<span *ngFor="let item of trackingTags" class="badge bg-info text-dark fs-6">
+					{{ item.tag }}: <strong>{{ item.count }}</strong>
+				</span>
+			</div>
+		</div>
+	</div>
 
 	<div *ngIf="updates.length > 0" class="row">
 		<div class="col-12">

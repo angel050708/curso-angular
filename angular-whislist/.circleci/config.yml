@@ -1,0 +1,55 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@7.1.0
+  cypress: cypress-io/cypress@3.4.2
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/node:20.18-browsers
+    working_directory: ~/repo/angular-whislist
+    steps:
+      - checkout:
+          path: ~/repo
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Build Angular app
+          command: npm run build
+      - run:
+          name: Run unit tests
+          command: npx ng test --watch=false
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - angular-whislist/dist
+
+  cypress-e2e:
+    docker:
+      - image: cypress/browsers:latest
+    working_directory: ~/repo/angular-whislist
+    steps:
+      - checkout:
+          path: ~/repo
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Start Angular dev server in background
+          command: npx ng serve --port 4200
+          background: true
+      - run:
+          name: Wait for server to be ready
+          command: npx wait-on http://localhost:4200 --timeout 120000
+      - run:
+          name: Run Cypress E2E tests
+          command: npx cypress run
+
+workflows:
+  version: 2
+  build-test-e2e:
+    jobs:
+      - build-and-test
+      - cypress-e2e:
+          requires:
+            - build-and-test
